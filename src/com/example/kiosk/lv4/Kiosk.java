@@ -36,53 +36,63 @@ public class Kiosk {
         Scanner sc = new Scanner(System.in);
 
         while(true){
-            boolean zeroEnd = true; // true : 0 입력하면 종료됨 , flase : 0 입력하면 뒤로가기
-            int num, num2;
+            int n1;
+            int n2 = 0;
 
-            System.out.println("[ MAIN MENU ]");
+            // *메인 메뉴* 출력
+            System.out.println("\n[ MAIN MENU ]");
             for(Menu m : menu){
                 System.out.println(menu.indexOf(m)+1 + ". " + m.categoryName);
             }
             System.out.println("0. 종료      | 종료");
 
+            // *메인 메뉴* 숫자 입력
+            try{
+                n1 = sc.nextInt();
+                // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
+                if(n1 < 0 || n1 > menu.size())
+                    throw new InputMismatchException();
+                // 0 입력 시 프로그램 종료
+                else if(n1 == 0)
+                    break;
+            }catch (InputMismatchException e){
+                System.out.println("다시 입력하세요.");
+                    continue;
+            }
+
+            Menu selectedMenu = menu.get(n1-1);
+
+            // *상세 메뉴* MenuItem List 출력
+            selectedMenu.showMenuItem();
+
+            // *상세 메뉴* MenuItem 입력
             while (true){
                 try{
-                    num = sc.nextInt();
-                    if(num < 0 || num > menu.size())
+                    n2 = sc.nextInt();
+                    // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
+                    if(n2 < 0 || n2 > selectedMenu.menuItems.size())
                         throw new InputMismatchException();
-                    else if(num == 0)
+                        // 0 입력 시 프로그램 뒤로가기
+                    else if(n2 == 0)
                         break;
-                    else{
-                        menu.get(num-1).showMenuItem();
-                        num2 = sc.nextInt();
-                        if(num2 < 0 || num2 > menu.size())
-                            throw new InputMismatchException();
-                        else if(num2 == 0)
-                            break;
-                        else{
-                            System.out.println(menu.get(num-1).menuItems.get(num2-1).menuName);
-                            break;
-                        }
-                    }
-
-                }catch (InputMismatchException e){
+                }catch (InputMismatchException e) {
                     System.out.println("다시 입력하세요.");
                     continue;
                 }
+                // 선택한 MenuItem
+                MenuItem selectedItem = selectedMenu.menuItems.get(n2 - 1);
 
+                // 선택한 MenuItem 출력
+                System.out.printf("선택한 메뉴 : %s | W %.1f | %s%n",
+                        selectedItem.menuName,
+                        selectedItem.menuPrice,
+                        selectedItem.menuInfo);
+                break;
             }
 
-            break;
         }
-
 
     }
 
-    void showMainMenu(){
-        for(Menu m : menu){
-            System.out.println(menu.indexOf(m)+1 + ". " + m.categoryName);
-        }
-        System.out.println("0. 종료      | 종료");
-    }
 
 }

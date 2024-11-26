@@ -10,6 +10,7 @@ import java.util.List;
  * 여러 버거들을 포함하는 상위 개념 ‘버거’ 같은 카테고리 이름 필드를 갖는다.
  * 메뉴 카테고리 이름을 반환하는 메서드가 구현되어야 한다.
  */
+
 public class Menu {
 
     // 속성(필드)
@@ -27,17 +28,18 @@ public class Menu {
     // 기능
     // 메뉴 카테고리 이름을 반환하는 메서드
 
-//    public void getCategoryName(List<Menu> menus){
-//
-//        for(Menu m : menus){
-//            System.out.println(menus.indexOf(m)+1 + ". " + m.categoryName);
-//        }
-//        System.out.println("0. 종료      | 종료");
-////        for(String s : categoryName)
-////            System.out.println(s);
-////        return categoryName;
-//    }
+    public void getCategoryName(List<Menu> menus){
 
+        for(Menu m : menus){
+            System.out.println(menus.indexOf(m)+1 + ". " + m.categoryName);
+        }
+        System.out.println("0. 종료      | 종료");
+//        for(String s : categoryName)
+//            System.out.println(s);
+//        return categoryName;
+    }
+
+    // List에 들어있는 MenuItem을 순차적으로 보여주는 함수
     public void showMenuItem(){
 
         // [ 카테고리명 ]
@@ -49,7 +51,7 @@ public class Menu {
                 System.out.print(" ");
             System.out.println("| W " + m.menuPrice + " | " + m.menuInfo);
         }
-        System.out.println("0. 종료           | 종료");
+        System.out.println("0. 뒤로가기");
     }
 
 }

@@ -28,7 +28,7 @@ public class Kiosk {
             // List와 Menu 클래스 활용하여 상위 카테고리 메뉴 출력
             System.out.println("\n[ MAIN MENU ]");
             for(Menu m : menu){
-                System.out.println(menu.indexOf(m)+1 + ". " + m.categoryName);
+                System.out.println(menu.indexOf(m)+1 + ". " + m.getCategoryName());
             }
             System.out.println("0. 종료      | 종료");
 
@@ -49,15 +49,17 @@ public class Kiosk {
             // 입력 받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
             Menu selectedMenu = menu.get(n1-1);
 
-            // MenuItem List 출력
-            selectedMenu.showMenuItem();
+
 
             while (true){
+                // MenuItem List 출력
+                selectedMenu.showMenuItem();
+
                 // 숫자 입력 받기
                 try{
                     n2 = sc.nextInt();
                     // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
-                    if(n2 < 0 || n2 > selectedMenu.menuItems.size())
+                    if(n2 < 0 || n2 > selectedMenu.getMenuItems().size())
                         throw new InputMismatchException();
                         // 0 입력 시 프로그램 뒤로가기
                     else if(n2 == 0)
@@ -67,13 +69,13 @@ public class Kiosk {
                     continue;
                 }
                 // 입력 받은 숫자가 올바르다면 인덱스로 활용해서 Menu가 가지고 있는 List<MenuItem>에 접근하기
-                MenuItem selectedItem = selectedMenu.menuItems.get(n2 - 1);
+                MenuItem selectedItem = selectedMenu.getMenuItems().get(n2 - 1);
 
                 // 선택한 MenuItem 출력
                 System.out.printf("선택한 메뉴 : %s | W %.1f | %s%n",
-                        selectedItem.menuName,
-                        selectedItem.menuPrice,
-                        selectedItem.menuInfo);
+                        selectedItem.getMenuName(),
+                        selectedItem.getMenuPrice(),
+                        selectedItem.getMenuInfo());
                 break;
             }
 

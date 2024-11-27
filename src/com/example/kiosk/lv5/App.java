@@ -26,27 +26,19 @@ public class App {
         menu.add(drinksMenu);
         menu.add(dessertsMenu);
 
-        // Menu 클래스 내 있는 List<MenuItem> 에 MenuItem 객체 생성하면서 삽입
-        burgersMenu.menuItems.add(
-                new MenuItem("ShackBurger", 6.9, "토마토, 양상추, 쉑소스가 토핑된 치즈버거"));
-        burgersMenu.menuItems.add(
-                new MenuItem("SmokeShack", 8.9, "베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거"));
-        burgersMenu.menuItems.add(
-                new MenuItem("Cheeseburger", 6.9, "포테이토 번과 비프패티, 치즈가 토핑된 치즈버거"));
-        burgersMenu.menuItems.add(
-                new MenuItem("Hamburger", 6.9, "비프패티를 기반으로 야채가 들어간 기본버거"));
+        burgersMenu.setMenuItem(new MenuItem("ShackBurger", 6.9, "토마토, 양상추, 쉑소스가 토핑된 치즈버거"));
+        burgersMenu.setMenuItem(new MenuItem("SmokeShack", 8.9, "베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거"));
+        burgersMenu.setMenuItem(new MenuItem("Cheeseburger", 6.9, "포테이토 번과 비프패티, 치즈가 토핑된 치즈버거"));
+        burgersMenu.setMenuItem(new MenuItem("Hamburger", 6.9, "비프패티를 기반으로 야채가 들어간 기본버거"));
 
-        drinksMenu.menuItems.add(
-                new MenuItem("Coke", 2.0, "코카콜라"));
-        drinksMenu.menuItems.add(
-                new MenuItem("Sprite", 2.0, "스프라이트"));
-        drinksMenu.menuItems.add(
-                new MenuItem("Fanta", 2.0, "환타 파인애플 맛"));
-        drinksMenu.menuItems.add(
-                new MenuItem("Coke Zero", 2.0, "제로 코카콜라"));
+        drinksMenu.setMenuItem(new MenuItem("Coke", 2.0, "코카콜라"));
+        drinksMenu.setMenuItem(new MenuItem("Sprite", 2.0, "스프라이트"));
+        drinksMenu.setMenuItem(new MenuItem("Fanta", 2.0, "환타 파인애플 맛"));
+        drinksMenu.setMenuItem(new MenuItem("Coke Zero", 2.0, "제로 코카콜라"));
 
-        dessertsMenu.menuItems.add(new MenuItem("Ice cream", 1.5, "소프트콘"));
-        dessertsMenu.menuItems.add(new MenuItem("Cookie", 1.5, "마카다미아 쿠키"));
+        dessertsMenu.setMenuItem(new MenuItem("Ice cream", 1.5, "소프트콘"));
+        dessertsMenu.setMenuItem(new MenuItem("Cookie", 1.5, "마카다미아 쿠키"));
+
 
         // Kiosk 객체 생성
         Kiosk kiosk = new Kiosk(menu);

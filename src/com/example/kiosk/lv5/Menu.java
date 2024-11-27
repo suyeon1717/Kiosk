@@ -14,9 +14,9 @@ import java.util.List;
 public class Menu {
 
     // 속성(필드)
-    List<MenuItem> menuItems;
+    private final List<MenuItem> menuItems;
+    private final String categoryName;
 
-    String categoryName;
     // 생성자
     public Menu(String categoryName, List<MenuItem> menuItems){
         this.menuItems = menuItems;
@@ -24,14 +24,6 @@ public class Menu {
     }
 
     // 기능
-    // 메뉴 카테고리 이름을 반환하는 메서드
-    public void getCategoryName(List<Menu> menus){
-
-        for(Menu m : menus){
-            System.out.println(menus.indexOf(m)+1 + ". " + m.categoryName);
-        }
-        System.out.println("0. 종료      | 종료");
-    }
 
     // List에 들어있는 MenuItem을 순차적으로 보여주는 함수
     public void showMenuItem(){
@@ -40,12 +32,27 @@ public class Menu {
         System.out.println("\n" + "[ " + categoryName.toUpperCase() + " MENU ]");
 
         for (MenuItem m : menuItems){
-            System.out.print(menuItems.indexOf(m)+1 + ". " + m.menuName);
-            for(int j=0; j<14-m.menuName.length(); j++) // 메뉴명 옆에 띄어쓰기를 입력해서 간격 맞추기 (14-글자수)
+            System.out.print(menuItems.indexOf(m)+1 + ". " + m.getMenuName());
+            for(int j=0; j<14-m.getMenuName().length(); j++) // 메뉴명 옆에 띄어쓰기를 입력해서 간격 맞추기 (14-글자수)
                 System.out.print(" ");
-            System.out.println("| W " + m.menuPrice + " | " + m.menuInfo);
+            System.out.println("| W " + m.getMenuPrice() + " | " + m.getMenuInfo());
         }
         System.out.println("0. 뒤로가기");
+    }
+
+    // 메뉴를 리스트에 저장하는 메서드
+    public void setMenuItem(MenuItem menuItem){
+        this.menuItems.add(menuItem);
+    }
+
+    // 메뉴 리스트를 반환하는 메서드
+    public List<MenuItem> getMenuItems(){
+        return menuItems;
+    }
+
+    // 메뉴 카테고리 이름을 반환하는 메서드
+    public String getCategoryName(){
+        return categoryName;
     }
 
 }

@@ -15,28 +15,22 @@ public class Menu {
 
     // 속성(필드)
     List<MenuItem> menuItems;
-//    List<String> categoryName = new ArrayList<>();
 
     String categoryName;
     // 생성자
     public Menu(String categoryName, List<MenuItem> menuItems){
-//        this.categoryName.add(categoryName);
         this.menuItems = menuItems;
         this.categoryName = categoryName;
     }
 
     // 기능
     // 메뉴 카테고리 이름을 반환하는 메서드
-
     public void getCategoryName(List<Menu> menus){
 
         for(Menu m : menus){
             System.out.println(menus.indexOf(m)+1 + ". " + m.categoryName);
         }
         System.out.println("0. 종료      | 종료");
-//        for(String s : categoryName)
-//            System.out.println(s);
-//        return categoryName;
     }
 
     // List에 들어있는 MenuItem을 순차적으로 보여주는 함수

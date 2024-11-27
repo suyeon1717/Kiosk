@@ -11,6 +11,7 @@ public class Cart extends MenuItem{
     // 속성(필드)
     private List<MenuItem> cartMenuItems;
 
+    private boolean cartStatus = false;
     // 생성자
 //    Cart(List<MenuItem> cartMenuItems){
 //
@@ -20,7 +21,7 @@ public class Cart extends MenuItem{
 //    Cart(MenuItem menuItem){
 //    }
 
-    Cart() {
+    public Cart() {
         cartMenuItems = new ArrayList<MenuItem>();
     }
 
@@ -28,11 +29,39 @@ public class Cart extends MenuItem{
 
     // 장바구니에 메뉴 담기
     public void addToCart(MenuItem menuItem){
-        cartMenuItems.add(menuItem);
+        this.cartMenuItems.add(menuItem);
+        cartStatus = true;
     }
 
-    // 장바구니 리턴
-    public List<MenuItem> showCart(){
-        return cartMenuItems;
+    // 장바구니에 담긴 메뉴 출력
+    public void showCart(){
+        for(MenuItem m : this.cartMenuItems)
+            System.out.printf("%s | W %.1f | %s",
+                    m.getMenuName(),
+                    m.getMenuPrice(),
+                    m.getMenuInfo());
+        System.out.println();
     }
+
+    // 장바구니 초기화
+    public void setEmptyCart(){
+        this.cartMenuItems.clear();
+        cartStatus = false;
+    }
+
+    // 장바구니 상태 반환
+    public boolean getCartStatus(){
+        return cartStatus;
+    }
+
+
+    // 장바구니 총 금액 반환
+    public Double getTotalPrice(){
+        double totalPrice = 0;
+        for(MenuItem m : this.cartMenuItems)
+            totalPrice += m.getMenuPrice();
+
+        return totalPrice;
+    }
+
 }

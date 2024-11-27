@@ -36,11 +36,10 @@ public class Cart extends MenuItem{
     // 장바구니에 담긴 메뉴 출력
     public void showCart(){
         for(MenuItem m : this.cartMenuItems)
-            System.out.printf("%s | W %.1f | %s",
+            System.out.printf("%s | W %.1f | %s\n",
                     m.getMenuName(),
                     m.getMenuPrice(),
                     m.getMenuInfo());
-        System.out.println();
     }
 
     // 장바구니 초기화

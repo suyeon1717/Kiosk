@@ -23,14 +23,11 @@ public class Kiosk {
         // 장바구니 생성
         Cart cart = new Cart();
 
-        // 장바구니에 메뉴가 들어있는지 여부
-        boolean cartIsExist = false;
-
         // 장바구니 금액
         double totalPrice = 0;
 
         // 장바구니 주문 완료
-        boolean orderDone = false;
+        boolean orderComplete = false;
 
         // 반복문 시작
         while(true){
@@ -44,7 +41,7 @@ public class Kiosk {
             }
             System.out.println("0. 종료      | 종료");
 
-            if(!cartIsExist){
+            if(!cart.getCartStatus()){
                 // 숫자 입력 받기
                 try{
                     n1 = sc.nextInt();
@@ -55,7 +52,7 @@ public class Kiosk {
                     else if(n1 == 0)
                         break;
                 }catch (InputMismatchException e){
-                    System.out.println("다시 입력하세요.");
+                    System.out.println("다시 입력하세요.1");
                     continue;
                 }
 
@@ -76,7 +73,7 @@ public class Kiosk {
                         else if(n2 == 0)
                             break;
                     }catch (InputMismatchException e) {
-                        System.out.println("다시 입력하세요.");
+                        System.out.println("다시 입력하세요.2");
                         continue;
                     }
                     // 입력 받은 숫자가 올바르다면 인덱스로 활용해서 Menu가 가지고 있는 List<MenuItem>에 접근하기
@@ -103,19 +100,19 @@ public class Kiosk {
                             if(n3 == 1){
                                 cart.addToCart(selectedItem);
                                 System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
-                                cartIsExist = true;
                                 System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
                                 break;
                             }
                             // 장바구니에 추가 X
-                            else if(n3 == 2)
+                            else if(n3 == 2){
                                 break;
+                            }
 
                                 // 입력 에러 처리
                             else
                                 throw new InputMismatchException();
                         }catch (InputMismatchException e){
-                            System.out.println("다시 입력하세요.");
+                            System.out.println("다시 입력하세요.3");
                         }
                     }
 
@@ -134,7 +131,7 @@ public class Kiosk {
                     try{
                         int n4 = sc.nextInt();
 
-                        // 4. Orders 선택
+                        // Orders 선택
                         if(n4 == ordersNum){
                             System.out.println("아래와 같이 주문하시겠습니까?");
                             System.out.println("\n[ Orders ]");
@@ -155,29 +152,37 @@ public class Kiosk {
 
                                     if(n5 == 1){
                                         System.out.printf("\n주문이 완료되었습니다. 금액은 W %.1f 입니다.",totalPrice);
-                                        orderDone = true;
+                                        orderComplete = true;
                                         break;
                                     }
-                                    else
+                                    else if(n5 == 2)
                                         break;
+                                    else
+                                        throw new InputMismatchException();
                                 }catch (InputMismatchException e){
-                                    System.out.println("다시 입력하세요.");
+                                    System.out.println("다시 입력하세요.4");
                                 }
                             }
 
                         }
-                        // 5. Cancel 선택
+                        // Cancel 선택
                         else if(n4 == cancelNum) {
-                            System.out.println("\n 장바구니를 초기화합니다.");
+                            System.out.println("\n장바구니를 초기화합니다.");
                             cart.setEmptyCart();
-                            cartIsExist = false;
+//                            cartIsExist = false;
                             break;
                         }
                         // 유효하지 않은 숫자 입력 처리
-                        else
+                        else if(n4 < ordersNum || n4 > cancelNum){
                             throw new InputMismatchException();
+                        }
+
+                        else{
+                            menuSelect(n4, cart);
+                        }
+
                     }catch (InputMismatchException e){
-                        System.out.println("다시 입력하세요.");
+                        System.out.println("다시 입력하세요.5");
                     }
 
                     break;
@@ -186,10 +191,9 @@ public class Kiosk {
             }
 
             // 주문 완료
-            if(orderDone){
+            if(orderComplete){
                 break;
             }
-
 
         }
 
@@ -202,88 +206,90 @@ public class Kiosk {
                 selectedItem.getMenuInfo());
     }
 
-    void aaaaa(Cart cart){
-        Scanner sc = new Scanner();
-        int n1, n2;
+    void menuSelect(int n, Cart cart){
+        Scanner sc = new Scanner(System.in);
+        int n2;
 
         while (true){
             // 숫자 입력 받기
             try{
-                n1 = sc.nextInt();
                 // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
-                if(n1 < 0 || n1 > menu.size())
+                if(n < 0 || n > menu.size())
                     throw new InputMismatchException();
+
+
                     // 0 입력 시 프로그램 종료
-                else if(n1 == 0)
+                else if(n == 0)
                     break;
-            }catch (InputMismatchException e){
-                System.out.println("다시 입력하세요.");
-                continue;
-            }
+                else{
+                    // 입력 받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
+                    Menu selectedMenu = menu.get(n-1);
 
-            // 입력 받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-            Menu selectedMenu = menu.get(n1-1);
+                    while (true){
+                        // MenuItem List 출력
+                        selectedMenu.showMenuItem();
 
-            while (true){
-                // MenuItem List 출력
-                selectedMenu.showMenuItem();
-
-                // 숫자 입력 받기
-                try{
-                    n2 = sc.nextInt();
-                    // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
-                    if(n2 < 0 || n2 > selectedMenu.getMenuItems().size())
-                        throw new InputMismatchException();
-                        // 0 입력 시 프로그램 뒤로가기
-                    else if(n2 == 0)
-                        break;
-                }catch (InputMismatchException e) {
-                    System.out.println("다시 입력하세요.");
-                    continue;
-                }
-                // 입력 받은 숫자가 올바르다면 인덱스로 활용해서 Menu가 가지고 있는 List<MenuItem>에 접근하기
-                MenuItem selectedItem = selectedMenu.getMenuItems().get(n2 - 1);
-
-                // 선택한 MenuItem 출력
-                System.out.print("선택한 메뉴 : ");
-                showSelectedItem(selectedItem);
-                System.out.println();
-
-                System.out.print("\n\"");
-                showSelectedItem(selectedItem);
-                System.out.println("\"");
-
-                System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
-                System.out.println("1. 확인        2. 취소");
-
-                while (true){
-                    try{
-                        // 장바구니에 추가 여부 입력받기
-                        int n3 = sc.nextInt();
-
-                        // 장바구니에 추가 O
-                        if(n3 == 1){
-                            cart.addToCart(selectedItem);
-                            System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
-                            cartIsExist = true;
-                            System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
-                            break;
+                        // 숫자 입력 받기
+                        try{
+                            n2 = sc.nextInt();
+                            // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
+                            if(n2 < 0 || n2 > selectedMenu.getMenuItems().size())
+                                throw new InputMismatchException();
+                                // 0 입력 시 프로그램 뒤로가기
+                            else if(n2 == 0)
+                                break;
+                        }catch (InputMismatchException e) {
+                            System.out.println("다시 입력하세요.6");
+                            continue;
                         }
-                        // 장바구니에 추가 X
-                        else if(n3 == 2)
-                            break;
+                        // 입력 받은 숫자가 올바르다면 인덱스로 활용해서 Menu가 가지고 있는 List<MenuItem>에 접근하기
+                        MenuItem selectedItem = selectedMenu.getMenuItems().get(n2 - 1);
 
-                            // 입력 에러 처리
-                        else
-                            throw new InputMismatchException();
-                    }catch (InputMismatchException e){
-                        System.out.println("다시 입력하세요.");
+                        // 선택한 MenuItem 출력
+                        System.out.print("선택한 메뉴 : ");
+                        showSelectedItem(selectedItem);
+                        System.out.println();
+
+                        System.out.print("\n\"");
+                        showSelectedItem(selectedItem);
+                        System.out.println("\"");
+
+                        System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+                        System.out.println("1. 확인        2. 취소");
+
+                        while (true){
+                            try{
+                                // 장바구니에 추가 여부 입력받기
+                                int n3 = sc.nextInt();
+
+                                // 장바구니에 추가 O
+                                if(n3 == 1){
+                                    cart.addToCart(selectedItem);
+                                    System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
+                                    System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
+                                    break;
+                                }
+                                // 장바구니에 추가 X
+                                else if(n3 == 2)
+                                    break;
+
+                                    // 입력 에러 처리
+                                else
+                                    throw new InputMismatchException();
+                            }catch (InputMismatchException e){
+                                System.out.println("다시 입력하세요.7");
+                            }
+                        }
+
+
+                        break;
                     }
                 }
-
-
-                break;
+            }catch (InputMismatchException e){
+                System.out.println("다시 입력하세요.8");
             }
+
+            break;
         }
 
     }

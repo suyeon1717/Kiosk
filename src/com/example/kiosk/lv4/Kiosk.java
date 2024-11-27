@@ -49,10 +49,10 @@ public class Kiosk {
             // 입력 받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
             Menu selectedMenu = menu.get(n1-1);
 
-            // MenuItem List 출력
-            selectedMenu.showMenuItem();
-
             while (true){
+                // MenuItem List 출력
+                selectedMenu.showMenuItem();
+
                 // 숫자 입력 받기
                 try{
                     n2 = sc.nextInt();

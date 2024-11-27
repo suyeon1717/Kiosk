@@ -1,4 +1,4 @@
-package com.example.kiosk.lv5;
+package com.example.kiosk.challenge_lv1;
 
 /**
  * MenuItem: 개별 음식 항목을 관리하는 클래스

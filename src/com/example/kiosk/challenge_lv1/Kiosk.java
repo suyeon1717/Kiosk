@@ -20,6 +20,9 @@ public class Kiosk {
         // 스캐너 선언
         Scanner sc = new Scanner(System.in);
 
+        // 장바구니 생성
+        Cart cart = new Cart();
+
         // 반복문 시작
         while(true){
             int n1;
@@ -49,8 +52,6 @@ public class Kiosk {
             // 입력 받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
             Menu selectedMenu = menu.get(n1-1);
 
-
-
             while (true){
                 // MenuItem List 출력
                 selectedMenu.showMenuItem();
@@ -72,15 +73,52 @@ public class Kiosk {
                 MenuItem selectedItem = selectedMenu.getMenuItems().get(n2 - 1);
 
                 // 선택한 MenuItem 출력
-                System.out.printf("선택한 메뉴 : %s | W %.1f | %s%n",
-                        selectedItem.getMenuName(),
-                        selectedItem.getMenuPrice(),
-                        selectedItem.getMenuInfo());
+                System.out.print("선택한 메뉴 : ");
+                showSelectedItem(selectedItem);
+                System.out.println();
+
+                System.out.print("\n\"");
+                showSelectedItem(selectedItem);
+                System.out.println("\"");
+
+                System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+                System.out.println("1. 확인        2. 취소");
+
+                while (true){
+                    try{
+                        // 장바구니에 추가 여부 입력받기
+                        int n3 = sc.nextInt();
+
+                        // 장바구니에 추가 O
+                        if(n3 == 1){
+                            cart.addToCart(selectedItem);
+                            System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
+                            break;
+                        }
+                        // 장바구니에 추가 X
+                        else if(n3 == 2)
+                            break;
+
+                        // 입력 에러 처리
+                        else
+                            throw new InputMismatchException();
+                    }catch (InputMismatchException e){
+                        System.out.println("다시 입력하세요.");
+                    }
+                }
+
                 break;
             }
 
         }
 
+    }
+
+    void showSelectedItem(MenuItem selectedItem){
+        System.out.printf("%s | W %.1f | %s",
+                selectedItem.getMenuName(),
+                selectedItem.getMenuPrice(),
+                selectedItem.getMenuInfo());
     }
 
 

@@ -127,7 +127,7 @@ public class Kiosk {
                     return n;
                 throw new InputMismatchException();
             }catch (InputMismatchException e){
-                System.out.println("다시 입력하세요.1");
+                System.out.println("잘못된 입력입니다. 다시 시도하세요.");
                 sc.nextLine();
             }
         }

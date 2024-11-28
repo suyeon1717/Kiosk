@@ -12,15 +12,8 @@ public class Cart extends MenuItem{
     private List<MenuItem> cartMenuItems;
 
     private boolean cartStatus = false;
+
     // 생성자
-//    Cart(List<MenuItem> cartMenuItems){
-//
-//        this.cartMenuItems = cartMenuItems;
-//    }
-
-//    Cart(MenuItem menuItem){
-//    }
-
     public Cart() {
         cartMenuItems = new ArrayList<MenuItem>();
     }

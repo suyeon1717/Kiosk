@@ -182,6 +182,7 @@ public class Kiosk {
                 System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
                 break; // 장바구니에 추가 후 종료
             }
+            sc.nextLine();
         }
     }
 

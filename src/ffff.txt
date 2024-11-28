@@ -1,0 +1,123 @@
+package com.example.kiosk.challenge_lv1;
+
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
+public class Kiosk {
+
+    // 속성(필드)
+    private final List<Menu> menu;
+    private final Scanner scanner;
+
+    // 생성자
+    public Kiosk(List<Menu> menu) {
+        this.menu = menu;
+        this.scanner = new Scanner(System.in);
+    }
+
+    // 기능
+    public void start() {
+        Cart cart = new Cart();
+        boolean orderComplete = false;
+
+        while (true) {
+            if (!cart.getCartStatus()) {
+                showMainMenu();
+
+                int mainChoice = getUserChoice(menu.size());
+                if (mainChoice == 0) break; // 프로그램 종료
+
+                Menu selectedMenu = menu.get(mainChoice - 1);
+                processMenuSelection(selectedMenu, cart);
+
+            } else {
+                orderComplete = processOrderMenu(cart);
+                if (orderComplete) break; // 주문 완료 후 종료
+            }
+        }
+    }
+
+    private void showMainMenu() {
+        System.out.println("\n[ MAIN MENU ]");
+        for (int i = 0; i < menu.size(); i++) {
+            System.out.println((i + 1) + ". " + menu.get(i).getCategoryName());
+        }
+        System.out.println("0. 종료");
+    }
+
+    private int getUserChoice(int maxOption) {
+        while (true) {
+            try {
+                int choice = scanner.nextInt();
+                if (choice >= 0 && choice <= maxOption) return choice;
+                throw new InputMismatchException();
+            } catch (InputMismatchException e) {
+                System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+                scanner.nextLine(); // 버퍼 정리
+            }
+        }
+    }
+
+    private void processMenuSelection(Menu selectedMenu, Cart cart) {
+        while (true) {
+            selectedMenu.showMenuItem();
+            System.out.println("0. 뒤로가기");
+
+            int itemChoice = getUserChoice(selectedMenu.getMenuItems().size());
+            if (itemChoice == 0) break;
+
+            MenuItem selectedItem = selectedMenu.getMenuItems().get(itemChoice - 1);
+            showSelectedItem(selectedItem);
+
+            if (confirmAction("위 메뉴를 장바구니에 추가하시겠습니까?")) {
+                cart.addToCart(selectedItem);
+                System.out.println(selectedItem.getMenuName() + "이 장바구니에 추가되었습니다.");
+            }
+        }
+    }
+
+    private boolean processOrderMenu(Cart cart) {
+        System.out.println("\n[ ORDER MENU ]");
+        System.out.println(menu.size() + 1 + ". Orders | 장바구니 확인 후 주문");
+        System.out.println(menu.size() + 2 + ". Cancel | 주문 취소");
+
+        int orderChoice = getUserChoice(menu.size() + 2);
+
+        if (orderChoice == menu.size() + 1) {
+            return handleOrder(cart);
+        } else if (orderChoice == menu.size() + 2) {
+            cart.setEmptyCart();
+            System.out.println("장바구니가 초기화되었습니다.");
+        }
+        return false;
+    }
+
+    private boolean handleOrder(Cart cart) {
+        System.out.println("\n[ Orders ]");
+        cart.showCart();
+        System.out.println("\n[ Total ]");
+        System.out.printf("W %.1f\n", cart.getTotalPrice());
+
+        if (confirmAction("주문하시겠습니까?")) {
+            System.out.printf("\n주문이 완료되었습니다. 금액은 W %.1f입니다.\n", cart.getTotalPrice());
+            return true;
+        }
+        return false;
+    }
+
+    private boolean confirmAction(String message) {
+        System.out.println(message);
+        System.out.println("1. 확인  2. 취소");
+
+        int choice = getUserChoice(2);
+        return choice == 1;
+    }
+
+    private void showSelectedItem(MenuItem selectedItem) {
+        System.out.printf("%s | W %.1f | %s\n",
+                selectedItem.getMenuName(),
+                selectedItem.getMenuPrice(),
+                selectedItem.getMenuInfo());
+    }
+}

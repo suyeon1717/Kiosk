@@ -45,10 +45,13 @@ public class Kiosk {
             else {
                 int ordersNum = menu.size()+1;
                 int cancelNum = menu.size()+2;
+
+                // *[ORDER MENU]*
                 System.out.println("\n[ ORDER MENU ]");
                 System.out.println(ordersNum + ". Orders       | 장바구니를 확인 후 주문합니다.");
                 System.out.println(cancelNum + ". Cancel       | 진행중인 주문을 취소합니다.");
 
+                //숫자 입력 받기
                 int choiceNum = userSelect(0, cancelNum);
 
                 // Orders 선택
@@ -64,19 +67,21 @@ public class Kiosk {
                     System.out.println("W " + cart.getTotalPrice());
 
                     // 주문할 지 메뉴판으로 돌아갈 지 결정
+                    // 숫자 입력받기
                     System.out.println("\n1. 주문      2. 메뉴판");
-
                     int backNum = userSelect(1,2);
-                    // 주문하기
+
+                    // 주문하기 선택
                     if(backNum == 1){
                         System.out.printf("\n주문이 완료되었습니다. 금액은 W %.1f 입니다.",cart.getTotalPrice());
                         orderComplete = true;
                         break;
                     }
-                    //메뉴판으로 돌아가기
+                    //메뉴판 선택
                     else
                         continue;
                 }
+
                 // Cancel 선택
                 else if(choiceNum == cancelNum) {
                     System.out.println("\n장바구니를 초기화합니다.");
@@ -88,6 +93,7 @@ public class Kiosk {
                 else  if(choiceNum == 0)
                     break;
 
+                // Main Menu의 메뉴 선택
                 else{
                     menuSelect(choiceNum, cart);
                 }
@@ -101,6 +107,7 @@ public class Kiosk {
         }
     }
 
+    // [ MAIN MENU ] 출력하는 메서드
     void mainMenu(){
         System.out.println("\n[ MAIN MENU ]");
         for(Menu m : menu){
@@ -109,6 +116,7 @@ public class Kiosk {
         System.out.println("0. 종료      | 종료");
     }
 
+    // 숫자 입력 받는 메서드와 예외 처리
     int userSelect(int minIndex, int maxIndex){
         while(true){
 
@@ -125,6 +133,7 @@ public class Kiosk {
         }
     }
 
+    // 선택한 메뉴 출력하는 메서드
     void showSelectedItem(MenuItem selectedItem){
         System.out.printf("%s | W %.1f | %s",
                 selectedItem.getMenuName(),
@@ -132,49 +141,49 @@ public class Kiosk {
                 selectedItem.getMenuInfo());
     }
 
+    // 메뉴 선택하여 장바구니 추가하는 메서드
+    void menuSelect(int n, Cart cart) {
+        if (n < 0 || n > menu.size()) {
+            System.out.println("잘못된 입력입니다. 다시 시도하세요.");
+            return;
+        }
 
-void menuSelect(int n, Cart cart) {
-    if (n < 0 || n > menu.size()) {
-        System.out.println("잘못된 입력입니다. 다시 시도하세요.");
-        return;
-    }
+        // 선택한 상위 메뉴 접근
+        Menu selectedMenu = menu.get(n - 1);
 
-    // 선택한 상위 메뉴 접근
-    Menu selectedMenu = menu.get(n - 1);
+        while (true) {
+            // 하위 메뉴 출력
+            selectedMenu.showMenuItem();
 
-    while (true) {
-        // 하위 메뉴 출력
-        selectedMenu.showMenuItem();
+            // 사용자 입력 받기
+            int menuChoiceNum = userSelect(0, selectedMenu.getMenuItems().size());
+            if (menuChoiceNum == 0) break; // 0 입력 시 뒤로가기
 
-        // 사용자 입력 받기
-        int menuChoiceNum = userSelect(0, selectedMenu.getMenuItems().size());
-        if (menuChoiceNum == 0) break; // 0 입력 시 뒤로가기
+            // 유효한 입력일 경우 하위 메뉴 선택
+            MenuItem selectedItem = selectedMenu.getMenuItems().get(menuChoiceNum - 1);
 
-        // 유효한 입력일 경우 하위 메뉴 선택
-        MenuItem selectedItem = selectedMenu.getMenuItems().get(menuChoiceNum - 1);
+            // 선택한 MenuItem 출력
+            System.out.print("선택한 메뉴 : ");
+            showSelectedItem(selectedItem);
+            System.out.println();
 
-        // 선택한 MenuItem 출력
-        System.out.print("선택한 메뉴 : ");
-        showSelectedItem(selectedItem);
-        System.out.println();
+            System.out.print("\n\"");
+            showSelectedItem(selectedItem);
+            System.out.println("\"");
 
-        System.out.print("\n\"");
-        showSelectedItem(selectedItem);
-        System.out.println("\"");
+            System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+            System.out.println("1. 확인        2. 취소");
 
-        System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
-        System.out.println("1. 확인        2. 취소");
+            int addConfirmCart = userSelect(1, 2);
 
-        int addConfirmCart = userSelect(1, 2);
-
-        if (addConfirmCart == 1) {
-            // 장바구니에 추가
-            cart.addToCart(selectedItem);
-            System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
-            break; // 장바구니에 추가 후 종료
+            if (addConfirmCart == 1) {
+                // 장바구니에 추가
+                cart.addToCart(selectedItem);
+                System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
+                break; // 장바구니에 추가 후 종료
+            }
         }
     }
-}
 
 
 }

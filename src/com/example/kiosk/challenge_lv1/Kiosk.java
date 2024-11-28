@@ -112,14 +112,15 @@ public class Kiosk {
                     System.out.println("\n1. 주문      2. 메뉴판");
 
                     int backNum = userSelect(1,2);
+                    // 주문하기
                     if(backNum == 1){
                         System.out.printf("\n주문이 완료되었습니다. 금액은 W %.1f 입니다.",cart.getTotalPrice());
                         orderComplete = true;
                         break;
                     }
-                    else if(backNum == 2)
+                    //메뉴판으로 돌아가기
+                    else
                         continue;
-
                 }
                 // Cancel 선택
                 else if(choiceNum == cancelNum) {
@@ -127,7 +128,6 @@ public class Kiosk {
                     cart.setEmptyCart();
                     continue;
                 }
-
                 else{
                     menuSelect(choiceNum, cart);
                 }
@@ -138,9 +138,7 @@ public class Kiosk {
             if(orderComplete){
                 break;
             }
-
         }
-
     }
 
     void mainMenu(){
@@ -174,94 +172,48 @@ public class Kiosk {
                 selectedItem.getMenuInfo());
     }
 
-
-    void menuSelect(int n, Cart cart){
-        Scanner sc = new Scanner(System.in);
-        int n2;
-
-        while (true){
-            // 숫자 입력 받기
-            try{
-                // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
-                if(n < 0 || n > menu.size())
-                    throw new InputMismatchException();
-
-
-                    // 0 입력 시 프로그램 종료
-                else if(n == 0)
-                    break;
-                else{
-                    // 입력 받은 숫자가 올바르다면 인덱스로 활용하여 List에 접근하기
-                    Menu selectedMenu = menu.get(n-1);
-
-                    while (true){
-                        // MenuItem List 출력
-                        selectedMenu.showMenuItem();
-
-                        // 숫자 입력 받기
-                        try{
-                            n2 = sc.nextInt();
-                            // 메뉴 번호 외의 숫자를 입력했을 경우 throw Exception
-                            if(n2 < 0 || n2 > selectedMenu.getMenuItems().size())
-                                throw new InputMismatchException();
-                                // 0 입력 시 프로그램 뒤로가기
-                            else if(n2 == 0)
-                                break;
-                        }catch (InputMismatchException e) {
-                            System.out.println("다시 입력하세요.6");
-                            continue;
-                        }
-                        // 입력 받은 숫자가 올바르다면 인덱스로 활용해서 Menu가 가지고 있는 List<MenuItem>에 접근하기
-                        MenuItem selectedItem = selectedMenu.getMenuItems().get(n2 - 1);
-
-                        // 선택한 MenuItem 출력
-                        System.out.print("선택한 메뉴 : ");
-                        showSelectedItem(selectedItem);
-                        System.out.println();
-
-                        System.out.print("\n\"");
-                        showSelectedItem(selectedItem);
-                        System.out.println("\"");
-
-                        System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
-                        System.out.println("1. 확인        2. 취소");
-
-                        while (true){
-                            try{
-                                // 장바구니에 추가 여부 입력받기
-                                int n3 = sc.nextInt();
-
-                                // 장바구니에 추가 O
-                                if(n3 == 1){
-                                    cart.addToCart(selectedItem);
-                                    System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
-                                    System.out.println("아래 메뉴판을 보시고 메뉴를 골라 입력해주세요.");
-                                    break;
-                                }
-                                // 장바구니에 추가 X
-                                else if(n3 == 2)
-                                    break;
-
-                                    // 입력 에러 처리
-                                else
-                                    throw new InputMismatchException();
-                            }catch (InputMismatchException e){
-                                System.out.println("다시 입력하세요.7");
-                            }
-                        }
-
-
-                        break;
-                    }
-                }
-            }catch (InputMismatchException e){
-                System.out.println("다시 입력하세요.8");
-            }
-
-            break;
-        }
-
+void menuSelect(int n, Cart cart) {
+    if (n <= 0 || n > menu.size()) {
+        System.out.println("잘못된 입력입니다. 다시 시도하세요.");
+        return;
     }
+
+    // 선택한 상위 메뉴 접근
+    Menu selectedMenu = menu.get(n - 1);
+
+    while (true) {
+        // 하위 메뉴 출력
+        selectedMenu.showMenuItem();
+
+        // 사용자 입력 받기
+        int menuChoiceNum = userSelect(0, selectedMenu.getMenuItems().size());
+        if (menuChoiceNum == 0) break; // 0 입력 시 뒤로가기
+
+        // 유효한 입력일 경우 하위 메뉴 선택
+        MenuItem selectedItem = selectedMenu.getMenuItems().get(menuChoiceNum - 1);
+
+        // 선택한 MenuItem 출력
+        System.out.print("선택한 메뉴 : ");
+        showSelectedItem(selectedItem);
+        System.out.println();
+
+        System.out.print("\n\"");
+        showSelectedItem(selectedItem);
+        System.out.println("\"");
+
+        System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+        System.out.println("1. 확인        2. 취소");
+
+        int addConfirmCart = userSelect(1, 2);
+
+        if (addConfirmCart == 1) {
+            // 장바구니에 추가
+            cart.addToCart(selectedItem);
+            System.out.println(selectedItem.getMenuName() + " 이 장바구니에 추가되었습니다.");
+            break; // 장바구니에 추가 후 종료
+        }
+    }
+}
 
 
 }
